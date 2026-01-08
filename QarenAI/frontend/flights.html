@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>بحث الرحلات</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, sans-serif;
+  background:#f5f7fa;
+  margin:0;
+  padding:40px 0;
+}
+
+.app {
+  max-width:480px;
+  margin:auto;
+  background:#fff;
+  border-radius:16px;
+  padding:24px;
+  box-shadow:0 12px 30px rgba(0,0,0,.08);
+}
+
+h1 {
+  text-align:center;
+  margin:0 0 32px;
+}
+
+/* ===== RADIO / CHECKBOX ===== */
+.radio-group {
+  display:flex;
+  justify-content:right;
+  gap:32px;
+  margin-bottom:20px;
+}
+
+.radio-group label,
+.checkbox-line label {
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:14px;
+  cursor:pointer;
+  white-space:nowrap;
+}
+
+/* ===== FIELDS ===== */
+.field { margin-bottom:14px; }
+
+label {
+  font-size:14px;
+  display:block;
+  margin-bottom:6px;
+}
+
+input, select {
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ddd;
+  font-size:14px;
+}
+
+/* ===== GRID ===== */
+.grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-bottom:14px;
+}
+
+/* ===== BUTTON ===== */
+button {
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:none;
+  background:#2563eb;
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+  margin-top:14px;
+}
+
+/* ===== FILTERS ===== */
+.filters {
+  margin-top:26px;
+  padding-top:20px;
+  border-top:1px solid #eee;
+}
+
+.range-box { padding:0 4px; }
+.range-box input { width:100%; }
+
+.checkbox-line { margin:10px 0; }
+
+/* ===== RESULTS ===== */
+.flight-card {
+  border:1px solid #eee;
+  border-radius:12px;
+  padding:14px;
+  margin-top:12px;
+}
+
+.flight-header {
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:6px;
+  font-size:14px;
+}
+
+.airline {
+  font-weight:600;
+}
+
+.time {
+  font-size:13px;
+  color:#555;
+}
+
+.duration {
+  font-size:13px;
+  color:#666;
+  margin-top:4px;
+}
+
+.price {
+  color:#2563eb;
+  font-size:18px;
+  font-weight:bold;
+  margin-top:6px;
+}
+
+.error {
+  background:#fee2e2;
+  color:#991b1b;
+  padding:10px;
+  border-radius:10px;
+  margin-bottom:12px;
+  display:none;
+}
+
+.autocomplete {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  left: 0;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  margin-top: 6px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  z-index: 9999;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+
+.field {
+  position: relative;
+}
+
+.autocomplete div {
+  padding: 10px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.autocomplete div:last-child {
+  border-bottom: none;
+}
+
+.autocomplete div:hover {
+  background: #f8fafc;
+}
+
+.input-wrap{
+  position: relative;
+}
+
+
+.input-wrap {
+  position: relative;
+}
+
+.input-wrap input {
+  padding-left: 42px; /* مساحة للزر ✕ */
+}
+
+
+.clear-btn {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: none;   /* 👈 التحكم بيكون بالـ JS */
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+}
+
+
+
+.clear-btn:hover {
+  background: #d1d5db;
+}
+
+
+.input-wrap input:focus + .clear-btn {
+  display: block;
+}
+
+.clear-btn:hover {
+  color: #111;
+}
+
+.locations-wrap {
+  position: relative;
+}
+
+.swap-btn {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  font-size: 16px;
+  z-index: 5;
+  transition: all .2s ease;
+}
+
+.swap-btn:hover {
+  background: #f3f4f6;
+  transform: translateX(-50%) rotate(180deg);
+}
+
+.passenger-box {
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.passenger-popup {
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ddd;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 6px;
+  z-index: 1000;
+}
+
+.passenger-popup .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<h1>بحث الرحلات ✈️</h1>
+
+<!-- نوع الرحلة -->
+<div class="radio-group">
+  <label>
+    ذهاب فقط
+    <input type="radio" name="tripType" checked onclick="setTripType('oneway')">
+  </label>
+  <label>
+    ذهاب وعودة
+    <input type="radio" name="tripType" onclick="setTripType('round')">
+  </label>
+</div>
+
+<div id="errorBox" class="error"></div>
+
+<!-- المدن -->
+<div class="locations-wrap">
+
+  <!-- زر التبديل -->
+  <button type="button" class="swap-btn" onclick="swapLocations()">⇄</button>
+
+  <div class="grid">
+    <!-- من -->
+    <div class="field">
+      <label>من</label>
+      <div class="input-wrap">
+        <input id="fromInput" type="text" placeholder="اكتب اسم المدينة أو المطار">
+        <span class="clear-btn" onclick="clearInput('fromInput','fromResults')">
+          ✕
+        </span>
+        <div id="fromResults" class="autocomplete"></div>
+      </div>
+    </div>
+
+    <!-- إلى -->
+    <div class="field">
+      <label>إلى</label>
+      <div class="input-wrap">
+        <input id="toInput" type="text" placeholder="اكتب اسم المدينة أو المطار">
+        <span class="clear-btn" onclick="clearInput('toInput','toResults')">
+          ✕
+        </span>
+        <div id="toResults" class="autocomplete"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+<!-- التواريخ -->
+<div class="grid">
+  <div class="field">
+    <label>تاريخ الذهاب</label>
+    <input type="date" id="departDate" min="">
+  </div>
+  <div class="field" id="returnBox" style="display:none;">
+    <label>تاريخ العودة</label>
+    <input type="date" id="returnDate">
+  </div>
+</div>
+
+<!-- الركاب -->
+<div class="field">
+  <label>عدد الركاب</label>
+
+  <div class="passenger-box" id="passengerBox">
+    <span id="passengerSummary">1 بالغ</span>
+  </div>
+
+
+  <div class="passenger-popup" id="passengerPopup">
+    <div class="row">
+      <span>بالغين</span>
+      <button type="button" onclick="changePax('adults', -1)">−</button>
+      <span id="adultsCount">1</span>
+      <button type="button" onclick="changePax('adults', 1)">+</button>
+    </div>
+
+    <div class="row">
+      <span>أطفال</span>
+      <button type="button" onclick="changePax('children', -1)">−</button>
+      <span id="childrenCount">0</span>
+      <button type="button" onclick="changePax('children', 1)">+</button>
+    </div>
+
+    <div class="row">
+      <span>رضع</span>
+      <button type="button" onclick="changePax('infants', -1)">−</button>
+      <span id="infantsCount">0</span>
+      <button type="button" onclick="changePax('infants', 1)">+</button>
+    </div>
+  </div>
+</div>
+
+
+<button onclick="searchFlights()">ابحث عن الرحلات</button>
+
+<!-- الفلترة -->
+<div class="filters">
+  <label>السعر الأقصى: <strong id="priceLabel">2000 SAR</strong></label>
+  <div class="range-box">
+    <input type="range" min="200" max="2000" step="50"
+           value="2000" id="priceRange"
+           oninput="applyFilters()">
+  </div>
+
+  <div class="checkbox-line">
+    <label>
+      مباشر فقط
+      <input type="checkbox" id="directOnly"
+             onchange="applyFilters()">
+    </label>
+  </div>
+
+  <label>ترتيب النتائج</label>
+  <select id="sortBy" onchange="applyFilters()">
+    <option value="cheap">الأرخص</option>
+    <option value="expensive">الأغلى</option>
+  </select>
+</div>
+
+<div id="results"></div>
+
+</div>
+
+<script>
+let passengerState = {
+  adults: 1,
+  children: 0,
+  infants: 0
+};
+
+
+const departDate = document.getElementById("departDate");
+const returnDate = document.getElementById("returnDate");
+const results = document.getElementById("results");
+const errorBox = document.getElementById("errorBox");
+const priceRange = document.getElementById("priceRange");
+const priceLabel = document.getElementById("priceLabel");
+const directOnly = document.getElementById("directOnly");
+const sortBy = document.getElementById("sortBy");
+
+let tripType="oneway";
+
+
+
+const AIRPORTS = [
+  { code: "RUH", city: "الرياض", airport: "مطار الملك خالد الدولي" },
+  { code: "JED", city: "جدة", airport: "مطار الملك عبدالعزيز الدولي" },
+  { code: "DMM", city: "الدمام", airport: "مطار الملك فهد الدولي" },
+  { code: "MED", city: "المدينة المنورة", airport: "مطار الأمير محمد بن عبدالعزيز" },
+  { code: "AHB", city: "أبها", airport: "مطار أبها الإقليمي" },
+  { code: "TIF", city: "الطائف", airport: "مطار الطائف الدولي" }
+];
+
+// ===== قاموس شركات الطيران =====
+const AIRLINES = {
+  SV: "الخطوط السعودية",
+  XY: "طيران ناس",
+  F3: "فلاي أديل",
+  FZ: "فلاي دبي",
+  EK: "طيران الإمارات",
+  QR: "الخطوط القطرية",
+  KU: "الخطوط الكويتية",
+  GF: "طيران الخليج"
+};
+
+// اختر OTA افتراضي (نقدر نبدله لاحقًا)
+const DEFAULT_OTA = "kiwi"; // kiwi | trip | budgetair (لاحقًا)
+
+// يبني رابط Affiliate بحثي (Context-based)
+function buildAffiliateLink(f) {
+  const origin = f.round ? f.outbound.from : f.from;
+  const destination = f.round ? f.outbound.to : f.to;
+  const depart = departDate.value;
+  const ret = (tripType === "round") ? returnDate.value : "";
+
+  const adults = passengerState.adults || 1;
+  const children = passengerState.children || 0;
+  const infants = passengerState.infants || 0;
+
+  const AFF_ID = "YOUR_AFF_ID";
+
+  if (DEFAULT_OTA === "kiwi") {
+    let url = `https://www.kiwi.com/en/search/results/${origin}/${destination}`;
+    if (depart) url += `/${depart}`;
+    if (ret) url += `/${ret}`;
+    url += `?adults=${adults}&children=${children}&infants=${infants}&affilid=${AFF_ID}`;
+    return url;
+  }
+
+  if (DEFAULT_OTA === "trip") {
+    let url = `https://www.trip.com/flights/${origin}-${destination}?`;
+    if (depart) url += `departDate=${depart}&`;
+    if (ret) url += `returnDate=${ret}&`;
+    url += `adults=${adults}&children=${children}&infants=${infants}`;
+    return url;
+  }
+
+  return `https://www.google.com/travel/flights?q=${origin}-${destination}`;
+}
+
+
+
+
+function airlineName(code) {
+  return AIRLINES[code] || code;
+}
+
+// ===== تحويل مدة Amadeus إلى عربي =====
+function formatDuration(iso) {
+  // مثال: PT2H10M
+  if (!iso) return "";
+  let h = 0, m = 0;
+  const hMatch = iso.match(/(\d+)H/);
+  const mMatch = iso.match(/(\d+)M/);
+  if (hMatch) h = parseInt(hMatch[1], 10);
+  if (mMatch) m = parseInt(mMatch[1], 10);
+  if (h && m) return `${h} س ${m} د`;
+  if (h) return `${h} س`;
+  if (m) return `${m} د`;
+  return "";
+}
+
+// ===== نص التوقفات =====
+function stopsText(stops) {
+  if (stops === 0) return "مباشر";
+  if (stops === 1) return "توقف واحد";
+  return `توقف ${stops}`;
+}
+
+
+
+let allFlights=[];
+let filteredFlights=[];
+
+function setTripType(type) {
+  tripType = type;
+
+  const returnBox = document.getElementById("returnBox");
+  if (!returnBox) return;
+
+  returnBox.style.display = type === "round" ? "block" : "none";
+}
+
+
+function showError(msg){
+  errorBox.innerText=msg;
+  errorBox.style.display="block";
+}
+
+function clearError(){
+  errorBox.style.display="none";
+}
+
+
+function buildKiwiUrl({ from, to, departDate, returnDate, passengers }) {
+
+  // تأكد التواريخ موجودة
+  if (!from || !to || !departDate) return "#";
+
+  let url = `https://www.kiwi.com/en/search/results/${from}/${to}/${departDate}`;
+
+  // أضف العودة فقط لو Round trip
+  if (returnDate && returnDate !== "") {
+    url += `/${returnDate}`;
+  }
+
+  url += `?adults=${passengers || 1}`;
+
+  return url;
+}
+
+
+async function searchFlights() {
+  clearError();
+  passengerPopup.style.display = "none";
+
+  results.innerHTML = "جاري البحث عن الرحلات...";
+  const fromIata = fromInput.dataset.iata;
+  const toIata = toInput.dataset.iata;
+  
+
+  if (!fromIata || !toIata) {
+    showError("اختر مدينة المغادرة والوصول من القائمة");
+    results.innerHTML = "";
+    return;
+  }
+
+
+  // ===== Validations =====
+  if (!departDate.value) {
+    showError("اختر تاريخ الذهاب");
+    results.innerHTML = "";
+    return;
+  }
+
+  if (tripType === "round" && !returnDate.value) {
+    showError("اختر تاريخ العودة");
+    results.innerHTML = "";
+    return;
+  }
+
+  if (!fromInput.value || !toInput.value) {
+    showError("اختر مدينة المغادرة والوصول");
+    results.innerHTML = "";
+    return;
+  }
+
+  if (fromInput.value === toInput.value) {
+    showError("مدينة المغادرة والوصول يجب أن تكون مختلفة");
+    results.innerHTML = "";
+    return;
+  }
+
+  if (
+    tripType === "round" &&
+    returnDate.value < departDate.value
+  ) {
+    showError("تاريخ العودة يجب أن يكون بعد تاريخ الذهاب");
+    results.innerHTML = "";
+    return;
+  }
+
+  if (!fromInput.dataset.iata || !toInput.dataset.iata) {
+  showError("اختر المدينة من القائمة");
+  return;
+  }
+
+
+  // ===== API Call =====
+  try {
+    const res = await fetch("https://ahsanha-api.up.railway.app/search-flights", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        tripType,
+        from: fromIata,
+        to: toIata,
+        departDate: departDate.value,
+        returnDate: tripType === "round" ? returnDate.value : "",
+        passengers: {
+          adults: passengerState.adults,
+          children: passengerState.children,
+          infants: passengerState.infants
+        }
+
+      })
+
+    });
+
+    const data = await res.json();
+    console.log("API response:", data);
+
+
+   if (!data.flights || data.flights.length === 0) {
+      results.innerHTML = "لا توجد رحلات";
+      return;
+    }
+
+    allFlights = data.flights.map(f => {
+      // لو oneway
+      if (data.type === "oneway") {
+        return {
+          ...f,
+          round: false
+        };
+      }
+
+      // لو round
+      return {
+        ...f,
+        round: true
+      };
+    });
+
+    applyFilters();
+
+
+  } catch (e) {
+    showError("حصل خطأ أثناء جلب الرحلات");
+    results.innerHTML = "";
+  }
+}
+
+function applyFilters() {
+  const max = Number(priceRange.value);
+  const direct = directOnly.checked;
+  const sort = sortBy.value;
+
+  // فلترة
+  filteredFlights = allFlights.filter(f => {
+    const price = Number(f.price);
+
+    if (price > max) return false;
+
+    // directOnly ينطبق فقط على الرحلات اللي فيها stops
+    if (direct) {
+      if (f.round) {
+        if (f.outbound.stops !== 0 || f.inbound.stops !== 0) return false;
+      } else {
+        if (f.stops !== 0) return false;
+      }
+    }
+
+    return true;
+  });
+
+  // ترتيب
+  if (sort === "cheap") {
+    filteredFlights.sort((a, b) => Number(a.price) - Number(b.price));
+  }
+
+  if (sort === "expensive") {
+    filteredFlights.sort((a, b) => Number(b.price) - Number(a.price));
+  }
+
+  priceLabel.innerText = max + " SAR";
+  renderFlights();
+}
+
+
+function renderFlights(){
+  results.innerHTML="";
+
+  filteredFlights.forEach(f=>{
+      
+    const bestOTA = pickCheapestOTA(f);
+    const kiwiUrl = buildKiwiLink({
+      fromSlug: fromInput.dataset.slug || f.from,
+      toSlug: toInput.dataset.slug || f.to,
+      departDate: departDate.value,
+      returnDate: "",
+      adults: passengerState.adults,
+      children: passengerState.children,
+      infants: passengerState.infants
+    });
+
+
+    /* ===== Round trip ===== */
+    if (f.round === true) {
+      results.innerHTML += `
+      <div class="flight-card">
+
+        <div class="airline">${airlineName(f.outbound.airline)}</div>
+
+
+        <div class="flight-header">
+          <strong>ذهاب</strong>
+          <span class="time">
+            ${f.outbound.from} → ${f.outbound.to}
+          </span>
+        </div>
+
+        <div class="time">
+          ${f.outbound.departTime} → ${f.outbound.arriveTime}
+        </div>
+
+        <div class="duration">
+          ${formatDuration(f.outbound.duration)} • ${stopsText(f.outbound.stops)}
+        </div>
+
+
+        <hr style="border:none;border-top:1px solid #eee;margin:10px 0;">
+
+        <div class="flight-header">
+          <strong>عودة</strong>
+          <span class="time">
+            ${f.inbound.from} → ${f.inbound.to}
+          </span>
+        </div>
+
+        <div class="time">
+          ${f.inbound.departTime} → ${f.inbound.arriveTime}
+        </div>
+
+        <div class="duration">
+          ${formatDuration(f.inbound.duration)} • ${stopsText(f.inbound.stops)}
+        </div>
+
+
+        <div class="price">SAR ${f.price}</div>
+
+
+        <div style="font-size:12px;color:#666;margin-top:4px;">
+          سعر تقريبي: SAR ${bestOTA.estimatedPrice}
+        </div>
+
+        <a class="book-btn" href="${buildKiwiLink()}" target="_blank">
+          احجز من Kiwi
+        </a>
+
+
+
+      </div>`;
+      return;
+    }
+
+    /* ===== One way ===== */
+    results.innerHTML += `
+    <div class="flight-card">
+      <div class="airline">${airlineName(f.airline)}</div>
+      <div class="time">${f.from} → ${f.to}</div>
+      <div class="time">${f.departTime} → ${f.arriveTime}</div>
+      <div class="duration">${formatDuration(f.duration)} • ${stopsText(f.stops)}</div>
+      <div class="price">SAR ${f.price}</div>
+      <a class="book-btn" href="${kiwiUrl}" target="_blank">
+       احجز من Kiwi
+      </a>
+
+    </div>`;
+  });
+}
+
+const today = new Date().toISOString().split("T")[0];
+document.getElementById("departDate").min = today;
+document.getElementById("returnDate").min = today;
+
+// ===== ضبط تواريخ الذهاب والعودة =====
+departDate.addEventListener("change", () => {
+  // أقل تاريخ للعودة = تاريخ الذهاب
+  returnDate.min = departDate.value;
+
+  // لو كانت العودة قبل الذهاب نلغيها
+  if (returnDate.value && returnDate.value < departDate.value) {
+    returnDate.value = "";
+  }
+});
+
+function buildBookingLink(f) {
+  const origin = f.round ? f.outbound.from : f.from;
+  const destination = f.round ? f.outbound.to : f.to;
+  const depart = departDate.value;
+  const ret = tripType === "round" ? returnDate.value : "";
+
+  // Placeholder (لاحقًا نحطه Affiliate link من Travelpayouts)
+  let url = `https://www.google.com/travel/flights?q=${origin}-${destination}`;
+
+  if (depart) url += `-${depart}`;
+  if (ret) url += `-${ret}`;
+
+  return url;
+}
+
+const OTA_PROVIDERS = [
+  {
+    id: "kiwi",
+    name: "Kiwi.com",
+    buildLink: (ctx) => {
+      let url = `https://www.kiwi.com/en/search/results/${ctx.origin}/${ctx.destination}`;
+      if (ctx.depart) url += `/${ctx.depart}`;
+      if (ctx.returnDate) url += `/${ctx.returnDate}`;
+      url += `?adults=${ctx.pax}&affilid=YOUR_AFF_ID`;
+      return url;
+    },
+    // Mock pricing modifier (نبدله لاحقًا)
+    priceFactor: 0.98
+  },
+  {
+    id: "trip",
+    name: "Trip.com",
+    buildLink: (ctx) => {
+      let url = `https://www.trip.com/flights/${ctx.origin}-${ctx.destination}?`;
+      if (ctx.depart) url += `departDate=${ctx.depart}&`;
+      if (ctx.returnDate) url += `returnDate=${ctx.returnDate}&`;
+      url += `adults=${ctx.pax}&AllianceID=YOUR_AFF_ID`;
+      return url;
+    },
+    priceFactor: 1.0
+  },
+  {
+    id: "budgetair",
+    name: "BudgetAir",
+    buildLink: (ctx) => {
+      let url = `https://www.budgetair.com/en/flights/${ctx.origin}/${ctx.destination}?`;
+      if (ctx.depart) url += `departureDate=${ctx.depart}&`;
+      if (ctx.returnDate) url += `returnDate=${ctx.returnDate}&`;
+      url += `adults=${ctx.pax}`;
+      return url;
+    },
+    priceFactor: 1.02
+  }
+];
+
+function pickCheapestOTA(f) {
+  const basePrice = Number(f.price);
+
+  const ctx = {
+    origin: f.round ? f.outbound.from : f.from,
+    destination: f.round ? f.outbound.to : f.to,
+    depart: departDate.value,
+    returnDate: (tripType === "round") ? returnDate.value : "",
+    pax: passengerState.adults || 1,
+    children: passengerState.children || 0,
+    infants: passengerState.infants || 0
+  };
+
+  let best = null;
+
+  OTA_PROVIDERS.forEach(ota => {
+    const estimatedPrice = Math.round(basePrice * ota.priceFactor);
+
+    if (!best || estimatedPrice < best.estimatedPrice) {
+      best = {
+        id: ota.id,
+        name: ota.name,
+        estimatedPrice,
+        link: ota.buildLink(ctx)
+      };
+    }
+  });
+
+  return best;
+}
+
+
+function setupAutocomplete(inputId, resultsId) {
+  const input = document.getElementById(inputId);
+  const resultsBox = document.getElementById(resultsId);
+  const clearBtn = input.parentElement.querySelector(".clear-btn");
+
+  if (!input || !resultsBox || !clearBtn) return;
+
+  let timer = null;
+
+  input.addEventListener("input", () => {
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const first = resultsBox.querySelector("div");
+        if (first) {
+          first.click();
+          e.preventDefault();
+        }
+      }
+    });
+
+    if (input.readOnly) return;
+
+    clearTimeout(timer);
+    const q = input.value.trim();
+
+    if (q.length < 2) {
+      resultsBox.innerHTML = "";
+      return;
+    }
+
+    timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`https://ahsanha-api.up.railway.app/locations/?q=${encodeURIComponent(q)}`);
+
+        const data = await res.json();
+
+        resultsBox.innerHTML = "";
+
+        data.forEach(loc => {
+          if (!loc.iata) return;
+
+          const div = document.createElement("div");
+
+          const label = loc.city; // Riyadh
+          const slug = loc.slug || loc.iata.toLowerCase();
+
+          div.textContent = `${label} (${loc.iata})`;
+
+          div.onclick = () => {
+            input.value = `${label} (${loc.iata})`;
+            input.dataset.iata = loc.iata;
+            input.dataset.slug = slug;
+            input.readOnly = true;
+
+            clearBtn.style.display = "flex";
+            resultsBox.innerHTML = "";
+          };
+
+          resultsBox.appendChild(div);
+        });
+
+
+      } catch (e) {
+        resultsBox.innerHTML = "";
+      }
+    }, 250);
+  });
+}
+
+
+
+function clearInput(inputId, resultsId) {
+  const input = document.getElementById(inputId);
+  const results = document.getElementById(resultsId);
+  const clearBtn = input.parentElement.querySelector(".clear-btn");
+
+  input.value = "";
+  input.dataset.iata = "";
+  input.readOnly = false;
+
+  if (results) results.innerHTML = "";
+  if (clearBtn) clearBtn.style.display = "none";
+
+  input.focus();
+}
+
+function swapLocations() {
+  const fromInput = document.getElementById("fromInput");
+  const toInput = document.getElementById("toInput");
+
+  const fromWrap = fromInput.closest(".input-wrap");
+  const toWrap = toInput.closest(".input-wrap");
+
+  // خزّن القيم
+  const fromValue = fromInput.value;
+  const fromIata = fromInput.dataset.iata;
+
+  const toValue = toInput.value;
+  const toIata = toInput.dataset.iata;
+
+  // بدّل
+  fromInput.value = toValue || "";
+  fromInput.dataset.iata = toIata || "";
+
+  toInput.value = fromValue || "";
+  toInput.dataset.iata = fromIata || "";
+
+  // readOnly
+  fromInput.readOnly = !!toIata;
+  toInput.readOnly = !!fromIata;
+
+  // زر ✕
+  fromWrap.classList.toggle("has-value", !!toIata);
+  toWrap.classList.toggle("has-value", !!fromIata);
+}
+
+function buildKiwiLink() {
+  const fromSlug = fromInput.dataset.slug;
+  const toSlug = toInput.dataset.slug;
+
+  if (!fromSlug || !toSlug) return "#";
+
+  let url = `https://www.kiwi.com/en/search/results/${fromSlug}/${toSlug}/${departDate.value}`;
+
+  if (tripType === "round") {
+    url += `/${returnDate.value}`;
+  }
+
+  url += `?adults=${passengerState.adults}`;
+  url += `&children=${passengerState.children}`;
+  url += `&infants=${passengerState.infants}`;
+  url += `&currency=SAR&locale=ar`;
+  url += `&affilid=485890`;
+
+  return url;
+}
+
+
+
+
+
+setupAutocomplete("fromInput", "fromResults", "fromClear");
+setupAutocomplete("toInput", "toResults", "toClear");
+// ===== Passenger State =====
+
+
+const passengerBox = document.getElementById("passengerBox");
+const passengerPopup = document.getElementById("passengerPopup");
+const passengerSummary = document.getElementById("passengerSummary");
+
+const adultsCount = document.getElementById("adultsCount");
+const childrenCount = document.getElementById("childrenCount");
+const infantsCount = document.getElementById("infantsCount");
+
+// فتح / إغلاق نافذة الركاب
+passengerBox.addEventListener("click", () => {
+  passengerPopup.style.display =
+    passengerPopup.style.display === "block" ? "none" : "block";
+});
+
+// إغلاق عند الضغط خارجها
+document.addEventListener("click", (e) => {
+  if (
+    !passengerBox.contains(e.target) &&
+    !passengerPopup.contains(e.target)
+  ) {
+    passengerPopup.style.display = "none";
+  }
+});
+
+
+function updatePassengerUI() {
+  document.getElementById("adultsCount").innerText = passengerState.adults;
+  document.getElementById("childrenCount").innerText = passengerState.children;
+  document.getElementById("infantsCount").innerText = passengerState.infants;
+
+  let parts = [];
+  if (passengerState.adults) parts.push(`${passengerState.adults} بالغ`);
+  if (passengerState.children) parts.push(`${passengerState.children} طفل`);
+  if (passengerState.infants) parts.push(`${passengerState.infants} رضيع`);
+
+  passengerSummary.innerText = parts.join("، ");
+}
+
+
+// ===== Change passengers =====
+function changePax(type, delta) {
+  if (type === "adults") {
+    passengerState.adults = Math.max(1, passengerState.adults + delta);
+  }
+
+  if (type === "children") {
+    passengerState.children = Math.max(0, passengerState.children + delta);
+  }
+
+  if (type === "infants") {
+    passengerState.infants = Math.max(0, passengerState.infants + delta);
+    // لا يزيد الرضع عن عدد البالغين
+    passengerState.infants = Math.min(
+      passengerState.infants,
+      passengerState.adults
+    );
+  }
+
+  // تحديث الأرقام
+  adultsCount.innerText = passengerState.adults;
+  childrenCount.innerText = passengerState.children;
+  infantsCount.innerText = passengerState.infants;
+
+  updatePassengerSummary();
+}
+
+// ===== Summary text =====
+function updatePassengerSummary() {
+  let text = `${passengerState.adults} بالغ`;
+  if (passengerState.children) text += `، ${passengerState.children} طفل`;
+  if (passengerState.infants) text += `، ${passengerState.infants} رضيع`;
+  passengerSummary.innerText = text;
+}
+
+
+
+
+
+</script>
+
+</body>
+</html>

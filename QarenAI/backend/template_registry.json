@@ -1,0 +1,13 @@
+{
+  "product.smartphone": {
+    "label": "جوالات",
+    "filters": [
+      { "key": "price", "type": "range", "label": "السعر", "unit": "SAR" },
+      { "key": "brand", "type": "multi_select", "label": "الشركة" },
+      { "key": "storage", "type": "select", "label": "التخزين", "options": ["64GB","128GB","256GB","512GB","1TB"] },
+      { "key": "color", "type": "multi_select", "label": "اللون" },
+      { "key": "seller", "type": "multi_select", "label": "المتجر" }
+    ],
+    "default_sort": "best_value"
+  }
+}

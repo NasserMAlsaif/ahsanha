@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <title>نتائج البحث</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #f5f7fa;
+      font-family: system-ui;
+    }
+
+    .app {
+      max-width: 480px;
+      margin: 60px auto;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+      padding: 32px;
+    }
+
+    h2 {
+      margin-top: 0;
+    }
+
+    .placeholder {
+      background: #f0f3f8;
+      padding: 16px;
+      border-radius: 10px;
+      margin-top: 16px;
+      color: #555;
+      font-size: 14px;
+    }
+
+    button {
+      margin-top: 20px;
+      background: none;
+      border: none;
+      color: #1e74ff;
+      cursor: pointer;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="app">
+  <h2 id="title"></h2>
+
+  <div class="placeholder">
+    🚧 سيتم قريبًا عرض أفضل النتائج من المتاجر ومزودي الخدمة.
+  </div>
+
+  <button onclick="goBack()">⬅️ رجوع</button>
+</div>
+
+<script>
+  const q = localStorage.getItem("searchQuery") || "";
+  document.getElementById("title").innerText = `نتائج البحث عن: "${q}"`;
+
+  function goBack() {
+    window.location.href = "index.html";
+  }
+</script>
+
+</body>
+</html>

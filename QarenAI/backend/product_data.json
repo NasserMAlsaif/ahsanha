@@ -1,0 +1,29 @@
+[
+  {
+    "domain": "product.smartphone",
+    "brand": "Apple",
+    "model": "iPhone Pro Max",
+    "storage": "256GB",
+    "color": "أسود",
+    "seller": "Amazon",
+    "price": 5299
+  },
+  {
+    "domain": "product.smartphone",
+    "brand": "Apple",
+    "model": "iPhone Pro Max",
+    "storage": "256GB",
+    "color": "أسود",
+    "seller": "Jarir",
+    "price": 5499
+  },
+  {
+    "domain": "product.smartphone",
+    "brand": "Samsung",
+    "model": "Galaxy S25 Ultra",
+    "storage": "512GB",
+    "color": "رمادي",
+    "seller": "Extra",
+    "price": 4999
+  }
+]
